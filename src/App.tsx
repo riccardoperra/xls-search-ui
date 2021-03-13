@@ -1,30 +1,50 @@
-import {Box, ChakraProvider, Table, Tbody, Td, Th, Thead, Tr} from '@chakra-ui/react';
-import React, {useEffect, useMemo, useState} from 'react';
+import {Box, ChakraProvider, Divider, Input, InputGroup, InputLeftElement, Stack} from '@chakra-ui/react';
+import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import './App.css';
 import {AppPage} from './lib/components/AppPage';
 import {getSpreadsheet} from './lib/utils/get-spreadsheet';
-import {Footer} from './lib/components/Header';
-import {FileUploader} from './lib/components/FileUploader';
 import {ColumnFilter} from './lib/components/ColumnFilter';
+import {FiSearch} from 'react-icons/all';
+import {FileUploader} from './lib/components/FileUploader';
+import {VirtualTable} from './lib/components/VirtualTable';
+import {Column} from 'react-table';
 
 function App() {
-  const footerHeight = '56px';
-  const headerHeight = '56px';
   const [file, setFile] = useState<File | null>(null);
-  const [columns, setColumns] = useState<string[]>([]);
-  const [spreadSheet, setSpreadsheet] = useState<any[][]>([]);
-  const [selected, setSelected] = useState<string | undefined>(undefined);
+  const [columns, setColumns] = useState<Column[]>([]);
+  const [spreadSheet, setSpreadsheet] = useState<{ [key: string]: string }[]>([]);
+  const [selected, setSelected] = useState<string | undefined>('Tutte');
   const [value, setValue] = useState<string>('');
+
+  const appContainerRef = useRef<HTMLDivElement>(null);
+  const headerContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (file) {
       getFile(file).then(spreadsheet => {
         const firstRow = spreadsheet.shift();
         if (firstRow) {
-          setColumns(firstRow);
+          setColumns(firstRow.map((row, index) => ({
+            Header: row,
+            id: String(index),
+            accessor: `acc_${index}`,
+            width: 150
+          })));
         }
-        setSpreadsheet(spreadsheet as any[]);
-        console.log(firstRow, spreadsheet);
+        // @ts-ignore
+        const spread = spreadsheet.reduce((acc: any[], row: any[]) => {
+          return [
+            ...acc,
+            {
+              ...row.reduce((accInnerRow, innerRow, i) => ({
+                ...accInnerRow,
+                [`acc_${i}`]: innerRow
+              }), {})
+            }
+          ]
+        }, []);
+        setSpreadsheet(spread);
+        console.log(spread);
       });
     } else {
       setColumns([]);
@@ -37,62 +57,64 @@ function App() {
     return getSpreadsheet<[string[], ...any[]]>(buffer, 'buffer');
   };
 
-  const getContainerHeight = useMemo(() => {
-    return `calc(100% - ${footerHeight} - ${headerHeight})`;
-  }, [file]);
-
   return (
     <>
       <ChakraProvider>
         <AppPage>
           <Box
-            height={headerHeight}
-            p={2}>
-            {file && columns && (
-              <ColumnFilter
-                onChangeSelected={setSelected}
-                selected={selected}
+            ref={appContainerRef}
+            h='100%'
+            borderRadius='6px'
+            backgroundColor='white'>
+            <Box ref={headerContainerRef}>
+              <Stack spacing="4" p={6} pb={2}>
+                <FileUploader
+                  file={file}
+                  onFileChange={setFile}
+                  acceptedFileTypes={['.csv', '.xls', '.xlsx']}
+                />
+
+                <InputGroup
+                  variant="filled"
+                  size="lg">
+                  <InputLeftElement
+                    pointerEvents="none"
+                    children={<FiSearch color="gray.300"/>}
+                  />
+                  <Input
+                    type="text"
+                    onChange={evt => setValue(evt.target.value)}
+                    placeholder="Ricerca"/>
+                </InputGroup>
+              </Stack>
+
+
+              <Divider mt={2} mb={2}/>
+
+              <Stack spacing={4} p={6} py={2}>
+                <Box>
+                  <ColumnFilter
+                    onChangeSelected={setSelected}
+                    selected={selected || 'Tutte'}
+                    columns={columns.length > 0 ? columns.map(c => c.Header as string) : ['Tutte']}
+                  />
+                </Box>
+              </Stack>
+            </Box>
+
+            <Divider mt={2} mb={2}/>
+
+            <Box
+              mt={2}
+              mb={2}>
+              {/*<DataTable/>*/}
+              <VirtualTable
                 columns={columns}
-                value={value}
-                onValueChange={setValue}
+                data={spreadSheet}
+                height={((appContainerRef.current?.clientHeight || 0) - (headerContainerRef.current?.clientHeight || 0) - 100)}
               />
-            )}
+            </Box>
           </Box>
-
-          <Box
-            height={getContainerHeight}
-            overflow='auto'>
-            <Table size="sm" variant="simple">
-              <Thead>
-                <Tr>
-                  {columns.map((column, index) => (
-                    <Th key={index}>{column}</Th>
-                  ))}
-                </Tr>
-              </Thead>
-              <Tbody>
-                {spreadSheet.map((columns, index) => (
-                  <Tr key={index}>
-                    {columns.map((column, i) => (
-                      <Td key={`${index}_${i}_${column}`}>
-                        {column}
-                      </Td>
-                    ))}
-                  </Tr>
-                ))}
-              </Tbody>
-            </Table>
-          </Box>
-
-
-          <Footer height="56px">
-            <FileUploader
-              file={file}
-              onFileChange={setFile}
-              acceptedFileTypes={['.xlsx', '.xls', '.csv']}
-            />
-          </Footer>
-
         </AppPage>
       </ChakraProvider>
 
