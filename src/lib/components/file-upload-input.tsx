@@ -1,7 +1,19 @@
-import {Icon, Input, InputGroup, InputLeftElement, InputRightElement} from '@chakra-ui/react';
-import React, {ChangeEvent, ChangeEventHandler, useCallback, useRef, useState} from 'react';
+import {
+  Icon,
+  Input,
+  InputGroup,
+  InputLeftElement,
+  InputRightElement,
+} from "@chakra-ui/react";
+import React, {
+  ChangeEvent,
+  ChangeEventHandler,
+  useCallback,
+  useRef,
+  useState,
+} from "react";
 
-import {FiFile, FiTrash} from 'react-icons/all';
+import { FiFile, FiTrash } from "react-icons/all";
 
 interface FileInputProps {
   file: File | null;
@@ -12,7 +24,7 @@ interface FileInputProps {
 }
 
 export const FileInput = (props: FileInputProps) => {
-  const {file, acceptedFileTypes, placeholder, onFileChange} = props;
+  const { file, acceptedFileTypes, placeholder, onFileChange } = props;
   const inputRef = useRef<HTMLInputElement | null>(null);
 
   const handleClick = () => {
@@ -26,34 +38,31 @@ export const FileInput = (props: FileInputProps) => {
     onFileChange(files ? files[0] : null);
   };
 
-  const removeFile = () => onFileChange(null)
+  const removeFile = () => onFileChange(null);
 
-  const getFileName = useCallback(() => file ? file.name : '', [file]);
+  const getFileName = useCallback(() => (file ? file.name : ""), [file]);
 
   return (
     <InputGroup>
-      <InputLeftElement
-        pointerEvents="none"
-        children={<Icon as={FiFile}/>}
-      />
+      <InputLeftElement pointerEvents="none" children={<Icon as={FiFile} />} />
       <input
-        type='file'
-        accept={acceptedFileTypes.join(', ')}
+        type="file"
+        accept={acceptedFileTypes.join(", ")}
         ref={inputRef}
         onChange={handleChange}
-        style={{display: 'none'}}
+        style={{ display: "none" }}
       />
       <Input
-        placeholder={placeholder || 'Your file ...'}
+        placeholder={placeholder || "Your file ..."}
         onClick={handleClick}
         readOnly
         value={getFileName()}
       />
       {file && (
         <InputRightElement
-          cursor='pointer'
+          cursor="pointer"
           onClick={removeFile}
-          children={<Icon as={FiTrash}/>}
+          children={<Icon as={FiTrash} />}
         />
       )}
     </InputGroup>

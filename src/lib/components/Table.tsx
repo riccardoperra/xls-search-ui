@@ -1,46 +1,46 @@
-import {Table, Tbody, Td, Th, Thead, Tr} from '@chakra-ui/react';
-import React, {useMemo} from 'react';
-import {Column, useSortBy, useTable} from 'react-table';
+import { Table, Tbody, Td, Th, Thead, Tr } from "@chakra-ui/react";
+import React, { useMemo } from "react";
+import { Column, useSortBy, useTable } from "react-table";
 
 export function DataTable() {
   const data = useMemo(
     () => [
       {
-        fromUnit: 'inches',
-        toUnit: 'millimetres (mm)',
+        fromUnit: "inches",
+        toUnit: "millimetres (mm)",
         factor: 25.4,
       },
       {
-        fromUnit: 'feet',
-        toUnit: 'centimetres (cm)',
+        fromUnit: "feet",
+        toUnit: "centimetres (cm)",
         factor: 30.48,
       },
       {
-        fromUnit: 'yards',
-        toUnit: 'metres (m)',
+        fromUnit: "yards",
+        toUnit: "metres (m)",
         factor: 0.91444,
       },
     ],
-    [],
+    []
   );
 
   const columns = useMemo<Column[]>(
     () => [
       {
-        Header: 'To convert',
-        accessor: 'fromUnit',
+        Header: "To convert",
+        accessor: "fromUnit",
       },
       {
-        Header: 'Into',
-        accessor: 'toUnit',
+        Header: "Into",
+        accessor: "toUnit",
       },
       {
-        Header: 'Multiply by',
-        accessor: 'factor',
+        Header: "Multiply by",
+        accessor: "factor",
         isNumeric: true,
       },
     ],
-    [],
+    []
   );
 
   const {
@@ -50,7 +50,7 @@ export function DataTable() {
     rows,
     prepareRow,
     // @ts-ignore
-  } = useTable({columns, data}, useSortBy);
+  } = useTable({ columns, data }, useSortBy);
 
   return (
     <Table {...getTableProps()}>
@@ -58,9 +58,7 @@ export function DataTable() {
         {headerGroups.map((headerGroup) => (
           <Tr {...headerGroup.getHeaderGroupProps()}>
             {headerGroup.headers.map((column) => (
-              <Th {...column.getHeaderProps()}>
-                {column.render('Header')}
-              </Th>
+              <Th {...column.getHeaderProps()}>{column.render("Header")}</Th>
             ))}
           </Tr>
         ))}
@@ -71,9 +69,7 @@ export function DataTable() {
           return (
             <Tr {...row.getRowProps()}>
               {row.cells.map((cell) => (
-                <Td {...cell.getCellProps()}>
-                  {cell.render('Cell')}
-                </Td>
+                <Td {...cell.getCellProps()}>{cell.render("Cell")}</Td>
               ))}
             </Tr>
           );

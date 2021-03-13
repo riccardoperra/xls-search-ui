@@ -1,19 +1,20 @@
-import {Box, Table, Tbody, Td, Th, Thead, Tr} from '@chakra-ui/react';
-import React, {FC} from 'react';
-import {FixedSizeList} from 'react-window';
-import {Column, useFlexLayout, useTable} from 'react-table';
+import { Box, Table, Tbody, Td, Th, Thead, Tr } from "@chakra-ui/react";
+import React, {FC, useMemo, useCallback} from 'react';
+import { FixedSizeList } from "react-window";
+import { Column, useFlexLayout, useTable } from "react-table";
 
-type TableData<T> = T[];
-
-interface VirtualTableProps<T = any> {
+interface VirtualTableProps {
   data: any;
   columns: Column[];
   height: number;
 }
 
 const scrollbarWidth = () => {
-  const scrollDiv = document.createElement('div');
-  scrollDiv.setAttribute('style', 'width: 100px; height: 100px; overflow: scroll; position:absolute; top:-9999px;');
+  const scrollDiv = document.createElement("div");
+  scrollDiv.setAttribute(
+    "style",
+    "width: 100px; height: 100px; overflow: scroll; position:absolute; top:-9999px;"
+  );
   document.body.appendChild(scrollDiv);
   const scrollbarWidth = scrollDiv.offsetWidth - scrollDiv.clientWidth;
   document.body.removeChild(scrollDiv);
@@ -36,10 +37,10 @@ export const VirtualTable: FC<VirtualTableProps> = (props) => {
     useFlexLayout
   );
 
-  const scrollBarSize = React.useMemo(() => scrollbarWidth(), []);
+  const scrollBarSize = useMemo(() => scrollbarWidth(), []);
 
-  const RenderRow = React.useCallback(
-    ({index, style}) => {
+  const RenderRow = useCallback(
+    ({ index, style }) => {
       const row = rows[index];
       prepareRow(row);
       return (
@@ -50,13 +51,10 @@ export const VirtualTable: FC<VirtualTableProps> = (props) => {
           })}
           className="tr"
         >
-          {row.cells.map(cell => {
+          {row.cells.map((cell) => {
             return (
-              <Td as={Box}
-                  {...cell.getCellProps()}
-                  position="relative"
-              >
-                {cell.render('Cell')}
+              <Td as={Box} {...cell.getCellProps()} position="relative">
+                {cell.render("Cell")}
               </Td>
             );
           })}
@@ -67,48 +65,39 @@ export const VirtualTable: FC<VirtualTableProps> = (props) => {
   );
 
   return (
-      <Table
-        {...getTableProps()}
+    <Table {...getTableProps()} as={Box} overflow="auto" size="sm">
+      <Thead as={Box} minWidth="auto">
+        {headerGroups.map((headerGroup) => (
+          <Tr as={Box} {...headerGroup.getHeaderGroupProps()} className="tr">
+            {headerGroup.headers.map((column) => (
+              <Th
+                as={Box}
+                position="relative"
+                {...column.getHeaderProps()}
+                className="th"
+              >
+                {column.render("Header")}
+              </Th>
+            ))}
+          </Tr>
+        ))}
+      </Thead>
+
+      <Tbody
         as={Box}
-        overflow='auto'
-        size="sm">
-        <Thead
-          as={Box}
-          minWidth='auto'>
-          {headerGroups.map(headerGroup => (
-            <Tr as={Box} {...headerGroup.getHeaderGroupProps()} className="tr">
-              {headerGroup.headers.map(column => (
-                <Th as={Box}
-                    position="relative"
-                    {...column.getHeaderProps()} className="th">
-                  {column.render('Header')}
-                </Th>
-              ))}
-            </Tr>
-          ))}
-        </Thead>
-
-        <Tbody
-          as={Box}
-          {...getTableBodyProps()}
-          minWidth='auto'
-          overflowX='hidden'>
-          <FixedSizeList
-            height={props.height}
-            itemCount={rows.length}
-            itemSize={45}
-            width={totalColumnsWidth + scrollBarSize}
-          >
-            {RenderRow}
-          </FixedSizeList>
-        </Tbody>
-      </Table>
+        {...getTableBodyProps()}
+        minWidth="auto"
+        overflowX="hidden"
+      >
+        <FixedSizeList
+          height={props.height}
+          itemCount={rows.length}
+          itemSize={45}
+          width={totalColumnsWidth + scrollBarSize}
+        >
+          {RenderRow}
+        </FixedSizeList>
+      </Tbody>
+    </Table>
   );
-
-
 };
-
-function getStyles(props: any, align: any) {
-  throw new Error('Function not implemented.');
-}
-

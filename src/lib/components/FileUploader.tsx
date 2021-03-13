@@ -1,17 +1,16 @@
-import {Box, Button, Stack} from '@chakra-ui/react';
-import React, {ChangeEvent, useCallback, useRef} from 'react';
-import {IoTrashBin} from 'react-icons/all';
+import { Box, Button, Stack } from "@chakra-ui/react";
+import React, { ChangeEvent, useCallback, useRef } from "react";
+import { IoTrashBin } from "react-icons/all";
 
 interface FileInputProps {
   file: File | null;
   onFileChange: (file: File | null) => void;
   acceptedFileTypes: string[];
-  // value: any;
   placeholder?: string;
 }
 
 export const FileUploader = (props: FileInputProps) => {
-  const {file, acceptedFileTypes, placeholder, onFileChange} = props;
+  const { file, acceptedFileTypes, onFileChange } = props;
   const inputRef = useRef<HTMLInputElement | null>(null);
 
   const handleClick = () => {
@@ -28,33 +27,24 @@ export const FileUploader = (props: FileInputProps) => {
   const removeFile = () => onFileChange(null);
 
   const getFileName = useCallback(
-    () => !!file ? file.name : 'Nessun file caricato', [file]
+    () => (!!file ? file.name : "Nessun file caricato"),
+    [file]
   );
 
   return (
-    <Stack
-      direction="row"
-      alignItems="center"
-      spacing="4">
-      <Button
-        colorScheme='green'
-        variant='solid'
-        onClick={handleClick}>
+    <Stack direction="row" alignItems="center" spacing="4">
+      <Button colorScheme="green" variant="solid" onClick={handleClick}>
         Carica file
       </Button>
       <input
-        type='file'
-        accept={acceptedFileTypes.join(', ')}
+        type="file"
+        accept={acceptedFileTypes.join(", ")}
         ref={inputRef}
         onChange={handleChange}
-        style={{display: 'none'}}
+        style={{ display: "none" }}
       />
       <Box mr={4}>{getFileName()}</Box>
-      {!!file && (
-        <IoTrashBin
-          onClick={removeFile}
-          cursor="pointer"/>
-      )}
+      {!!file && <IoTrashBin onClick={removeFile} cursor="pointer" />}
     </Stack>
   );
 };
