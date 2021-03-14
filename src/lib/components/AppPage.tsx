@@ -1,7 +1,7 @@
 import {Box} from '@chakra-ui/react';
-import React, {FC, useMemo} from 'react';
+import React, {FC} from 'react';
 import {useObservable} from '../../state/state-utils';
-import {isMobile$, windowSize$} from '../../state/ui';
+import {isMobile$} from '../../state/ui';
 
 export const AppPage: FC = ({children}) => {
   const [isMobile] = useObservable(isMobile$);
