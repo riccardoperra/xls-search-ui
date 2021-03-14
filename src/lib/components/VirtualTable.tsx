@@ -74,11 +74,11 @@ export const VirtualTable: FC<VirtualTableProps> = (props) => {
         overflowX="auto"
         overflowY="hidden"
       >
-        <Thead ref={headerRef} as={Box} minWidth="auto">
+        <Thead ref={headerRef} as={Box}>
           {headerGroups.map((headerGroup) => (
-            <Tr as={Box} {...headerGroup.getHeaderGroupProps()} className="tr">
+            <Tr {...headerGroup.getHeaderGroupProps()} className="tr">
               {headerGroup.headers.map((column) => (
-                <Th as={Box} position="relative" {...column.getHeaderProps()}>
+                <Th position="relative" {...column.getHeaderProps()}>
                   {column.render("Header")}
                 </Th>
               ))}
@@ -89,17 +89,18 @@ export const VirtualTable: FC<VirtualTableProps> = (props) => {
         <Tbody
           {...getTableBodyProps()}
           as={Box}
-          minWidth="auto"
+          width='100%'
           overflowY="auto"
+          overflowX='hidden'
           height={getTableHeight}
         >
           {page.map((row, i) => {
             prepareRow(row);
             return (
-              <Tr as={Box} {...row.getRowProps()}>
+              <Tr {...row.getRowProps()}>
                 {row.cells.map((cell) => {
                   return (
-                    <Td as={Box} {...cell.getCellProps()}>
+                    <Td {...cell.getCellProps()}>
                       {cell.render("Cell")}
                     </Td>
                   );

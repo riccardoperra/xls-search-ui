@@ -1,15 +1,6 @@
-import {
-  Box,
-  Menu,
-  MenuButton,
-  MenuItem,
-  MenuList,
-  Tag,
-  TagLabel,
-  TagRightIcon,
-} from "@chakra-ui/react";
-import React, { FC } from "react";
-import { FiChevronDown } from "react-icons/all";
+import {Box, Menu, MenuButton, MenuItem, MenuList, Tag, TagLabel, TagRightIcon,} from '@chakra-ui/react';
+import React, {FC} from 'react';
+import {FiChevronDown} from 'react-icons/all';
 
 type Columns<T extends string[] = string[]> = T;
 
@@ -22,15 +13,20 @@ interface FilterProps {
 export const ColumnFilter: FC<FilterProps> = (props) => {
   return (
     <Menu>
-      {({ isOpen }) => (
+      {({isOpen}) => (
         <>
           <MenuButton size="lg">
-            <Tag variant={"outline"} size="lg">
+            <Tag variant={'outline'} size="lg">
               <TagLabel>Colonna:</TagLabel>
-              <Box ml="2" mr="2" color="gray.600">
+              <Box
+                whiteSpace='nowrap'
+                overflow='hidden'
+                textOverflow='ellipsis'
+                maxWidth='145'
+                ml="2" mr="2" color="gray.600">
                 {props.selected}
               </Box>
-              <TagRightIcon as={FiChevronDown} />
+              <TagRightIcon as={FiChevronDown}/>
             </Tag>
           </MenuButton>
           <MenuList>

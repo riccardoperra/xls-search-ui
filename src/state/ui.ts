@@ -29,7 +29,8 @@ export const windowResize$ = fromEvent(window, "resize").pipe(
 );
 
 export const windowSize$ = UIState$.pipe(
-  map(({ innerWidth, innerHeight }) => ({ innerWidth, innerHeight }))
+  map(({ innerWidth, innerHeight }) => ({ innerWidth, innerHeight })),
+  distinctUntilChanged()
 );
 
 export const isMobile$ = UIState$.pipe(
