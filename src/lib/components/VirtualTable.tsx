@@ -89,9 +89,9 @@ export const VirtualTable: FC<VirtualTableProps> = (props) => {
         <Tbody
           {...getTableBodyProps()}
           as={Box}
-          width='100%'
+          width="100%"
           overflowY="auto"
-          overflowX='hidden'
+          overflowX="hidden"
           height={getTableHeight}
         >
           {page.map((row, i) => {
@@ -100,9 +100,7 @@ export const VirtualTable: FC<VirtualTableProps> = (props) => {
               <Tr {...row.getRowProps()}>
                 {row.cells.map((cell) => {
                   return (
-                    <Td {...cell.getCellProps()}>
-                      {cell.render("Cell")}
-                    </Td>
+                    <Td {...cell.getCellProps()}>{cell.render("Cell")}</Td>
                   );
                 })}
               </Tr>

@@ -1,8 +1,8 @@
 import { Box, Button, Stack } from "@chakra-ui/react";
 import React, { ChangeEvent, useCallback, useRef } from "react";
 import { IoTrashBin } from "react-icons/all";
-import {useObservable} from '../../state/state-utils';
-import {isMobile$} from '../../state/ui';
+import { useObservable } from "../../state/state-utils";
+import { isMobile$ } from "../../state/ui";
 
 interface FileInputProps {
   file: File | null;
@@ -37,8 +37,11 @@ export const FileUploader = (props: FileInputProps) => {
   return (
     <Stack direction="row" alignItems="center" spacing="4">
       <Button
-        size={isMobile ? 'sm' : 'md'}
-        colorScheme="green" variant="solid" onClick={handleClick}>
+        size={isMobile ? "sm" : "md"}
+        colorScheme="green"
+        variant="solid"
+        onClick={handleClick}
+      >
         Carica file
       </Button>
       <input
@@ -48,9 +51,9 @@ export const FileUploader = (props: FileInputProps) => {
         onChange={handleChange}
         style={{ display: "none" }}
       />
-      <Box
-        size={isMobile ? 'xs' : 'sm'}
-        mr={4}>{getFileName()}</Box>
+      <Box size={isMobile ? "xs" : "sm"} mr={4}>
+        {getFileName()}
+      </Box>
       {!!file && <IoTrashBin onClick={removeFile} cursor="pointer" />}
     </Stack>
   );
