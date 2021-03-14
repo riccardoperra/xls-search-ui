@@ -1,5 +1,5 @@
-import {Box, Table, Tbody, Td, Th, Thead, Tr} from '@chakra-ui/react';
-import React, {FC, useMemo, useRef} from 'react';
+import { Box, Table, Tbody, Td, Th, Thead, Tr } from "@chakra-ui/react";
+import React, { FC, useMemo, useRef } from "react";
 import {
   Column,
   TableOptions,
@@ -8,9 +8,9 @@ import {
   UsePaginationInstanceProps,
   UsePaginationState,
   useTable,
-  UseTableInstanceProps
-} from 'react-table';
-import {Pagination} from './Pagination';
+  UseTableInstanceProps,
+} from "react-table";
+import { Pagination } from "./Pagination";
 
 interface VirtualTableProps {
   data: any;
@@ -19,12 +19,13 @@ interface VirtualTableProps {
 }
 
 export interface TableInstanceWithPagination<D extends object = {}>
-  extends Omit<TableOptions<D>, 'columns' | 'pageCount'>,
+  extends Omit<TableOptions<D>, "columns" | "pageCount">,
     UseTableInstanceProps<D>,
-    UsePaginationInstanceProps<D> {
-}
+    UsePaginationInstanceProps<D> {}
 
-type TableWithPagination<D extends object = {}> = TableInstanceWithPagination & { state: UsePaginationState<D> };
+type TableWithPagination<
+  D extends object = {}
+> = TableInstanceWithPagination & { state: UsePaginationState<D> };
 
 export const VirtualTable: FC<VirtualTableProps> = (props) => {
   const {
@@ -41,9 +42,9 @@ export const VirtualTable: FC<VirtualTableProps> = (props) => {
     previousPage,
     nextPage,
     setPageSize,
-    state: {pageIndex, pageSize},
+    state: { pageIndex, pageSize },
   } = useTable<any>(
-    {columns: props.columns as Column<any>[], data: props.data},
+    { columns: props.columns as Column<any>[], data: props.data },
     useFlexLayout,
     usePagination
   ) as TableWithPagination;
@@ -52,30 +53,33 @@ export const VirtualTable: FC<VirtualTableProps> = (props) => {
   const paginationRef = useRef<HTMLDivElement>(null);
 
   const getTableHeight = useMemo(() => {
-    console.log(headerRef.current?.clientHeight, paginationRef.current?.clientHeight);
-    return Number(props.height) - Number(headerRef.current?.clientHeight) - Number(paginationRef.current?.clientHeight);
-  }, [headerRef, paginationRef, props.data, props.height, props.columns]);
+    console.log(
+      headerRef.current?.clientHeight,
+      paginationRef.current?.clientHeight
+    );
+    return (
+      Number(props.height) -
+      Number(headerRef.current?.clientHeight) -
+      Number(paginationRef.current?.clientHeight)
+    );
+  }, [headerRef, paginationRef, props.height]);
 
   return (
-    <Box
-      height={props.height}
-      display="flex"
-      flexDirection="column">
+    <Box height={props.height} display="flex" flexDirection="column">
       <Table
         flex={1}
         as={Box}
-        {...getTableProps()} size="sm"
-        overflowX='auto'
-        overflowY='hidden'>
-        <Thead
-          ref={headerRef}
-          as={Box}
-          minWidth="auto">
+        {...getTableProps()}
+        size="sm"
+        overflowX="auto"
+        overflowY="hidden"
+      >
+        <Thead ref={headerRef} as={Box} minWidth="auto">
           {headerGroups.map((headerGroup) => (
             <Tr as={Box} {...headerGroup.getHeaderGroupProps()} className="tr">
               {headerGroup.headers.map((column) => (
-                <Th as={Box} position="relative"{...column.getHeaderProps()}>
-                  {column.render('Header')}
+                <Th as={Box} position="relative" {...column.getHeaderProps()}>
+                  {column.render("Header")}
                 </Th>
               ))}
             </Tr>
@@ -86,14 +90,19 @@ export const VirtualTable: FC<VirtualTableProps> = (props) => {
           {...getTableBodyProps()}
           as={Box}
           minWidth="auto"
-          overflowY='auto'
-          height={getTableHeight}>
+          overflowY="auto"
+          height={getTableHeight}
+        >
           {page.map((row, i) => {
             prepareRow(row);
             return (
               <Tr as={Box} {...row.getRowProps()}>
-                {row.cells.map(cell => {
-                  return <Td as={Box} {...cell.getCellProps()}>{cell.render('Cell')}</Td>;
+                {row.cells.map((cell) => {
+                  return (
+                    <Td as={Box} {...cell.getCellProps()}>
+                      {cell.render("Cell")}
+                    </Td>
+                  );
                 })}
               </Tr>
             );

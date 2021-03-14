@@ -1,9 +1,7 @@
-import {Box} from '@chakra-ui/react';
-import React, {FC} from 'react';
-import {useObservable} from '../../state/state-utils';
-import {windowSize$} from '../../state/ui';
+import { Box } from "@chakra-ui/react";
+import React, { FC } from "react";
 
-export const AppPage: FC = ({children}) => {
+export const AppPage: FC = ({ children }) => {
   // const [size] = useObservable(windowSize$);
 
   return (
