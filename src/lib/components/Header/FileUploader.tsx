@@ -1,8 +1,8 @@
 import { Box, Button, Stack } from "@chakra-ui/react";
 import React, { ChangeEvent, useCallback, useRef } from "react";
 import { IoTrashBin } from "react-icons/all";
-import { useObservable } from "../../state/state-utils";
-import { isMobile$ } from "../../state/ui";
+import { useObservable } from "../../utils";
+import { isMobile$ } from "../../../store";
 
 interface FileInputProps {
   file: File | null;

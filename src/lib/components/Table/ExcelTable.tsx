@@ -1,33 +1,10 @@
 import { Box, Table, Tbody, Td, Th, Thead, Tr } from "@chakra-ui/react";
 import React, { FC, useMemo, useRef } from "react";
-import {
-  Column,
-  TableOptions,
-  useFlexLayout,
-  usePagination,
-  UsePaginationInstanceProps,
-  UsePaginationState,
-  useTable,
-  UseTableInstanceProps,
-} from "react-table";
-import { Pagination } from "./Pagination";
+import { Column, useFlexLayout, usePagination, useTable } from "react-table";
+import { ExcelTableProps, TableWithPagination } from "./types";
+import { Pagination } from "./widgets/Pagination";
 
-interface VirtualTableProps {
-  data: any;
-  columns: Column[];
-  height: number;
-}
-
-export interface TableInstanceWithPagination<D extends object = {}>
-  extends Omit<TableOptions<D>, "columns" | "pageCount">,
-    UseTableInstanceProps<D>,
-    UsePaginationInstanceProps<D> {}
-
-type TableWithPagination<
-  D extends object = {}
-> = TableInstanceWithPagination & { state: UsePaginationState<D> };
-
-export const VirtualTable: FC<VirtualTableProps> = (props) => {
+export const ExcelTable: FC<ExcelTableProps> = (props) => {
   const {
     getTableProps,
     getTableBodyProps,
@@ -66,19 +43,12 @@ export const VirtualTable: FC<VirtualTableProps> = (props) => {
 
   return (
     <Box height={props.height} display="flex" flexDirection="column">
-      <Table
-        flex={1}
-        as={Box}
-        {...getTableProps()}
-        size="sm"
-        overflowX="auto"
-        overflowY="hidden"
-      >
-        <Thead ref={headerRef} as={Box}>
+      <Table flex={1} as={Box} {...getTableProps()} size="sm" overflow="auto">
+        <Thead position="sticky" top="0" bg="white" ref={headerRef} as={Box}>
           {headerGroups.map((headerGroup) => (
-            <Tr {...headerGroup.getHeaderGroupProps()} className="tr">
+            <Tr as={Box} {...headerGroup.getHeaderGroupProps()} className="tr">
               {headerGroup.headers.map((column) => (
-                <Th position="relative" {...column.getHeaderProps()}>
+                <Th as={Box} position="relative" {...column.getHeaderProps()}>
                   {column.render("Header")}
                 </Th>
               ))}
@@ -90,14 +60,12 @@ export const VirtualTable: FC<VirtualTableProps> = (props) => {
           {...getTableBodyProps()}
           as={Box}
           width="100%"
-          overflowY="auto"
-          overflowX="hidden"
           height={getTableHeight}
         >
           {page.map((row, i) => {
             prepareRow(row);
             return (
-              <Tr {...row.getRowProps()}>
+              <Tr as={Box} {...row.getRowProps()}>
                 {row.cells.map((cell) => {
                   return (
                     <Td {...cell.getCellProps()}>{cell.render("Cell")}</Td>

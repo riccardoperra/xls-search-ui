@@ -11,22 +11,23 @@ import {
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import "./App.css";
 import { AppPage } from "./lib/components/AppPage";
-import { ColumnFilter } from "./lib/components/ColumnFilter";
 import { FiSearch } from "react-icons/all";
-import { FileUploader } from "./lib/components/FileUploader";
-import { VirtualTable } from "./lib/components/VirtualTable";
-import { isMobile$, UIState$ } from "./state/ui";
 import { fromEvent } from "rxjs";
 import { debounceTime, distinctUntilChanged, tap } from "rxjs/operators";
-import { setObservableState, useObservable } from "./state/state-utils";
+import { useRecoilCallback, useRecoilValue } from "recoil";
+import { FileUploader } from "./lib/components/Header/FileUploader";
+import { ColumnFilter } from "./lib/components/Header/ColumnFilter";
+import { ExcelTable } from "./lib/components/Table/ExcelTable";
 import {
   fileStore,
   filteredRowsByType,
+  isMobile$,
   setFileFromObjectFn,
   setSearchColumnFn,
   setSearchColumnTypeFn,
-} from "./state/file";
-import { useRecoilCallback, useRecoilValue } from "recoil";
+  UIState$,
+} from "./store";
+import { setObservableState, useObservable } from "./lib/utils";
 
 function App() {
   const [file, setFile] = useState<File | null>(null);
@@ -40,9 +41,9 @@ function App() {
   const appContainerRef = useRef<HTMLDivElement>(null);
   const headerContainerRef = useRef<HTMLDivElement>(null);
 
-  const onSetFile = (file: File | null) => {
+  const onSetFile = async (file: File | null) => {
     setFile(file);
-    setFileFromObject(file);
+    await setFileFromObject(file);
   };
 
   useEffect(() => {
@@ -139,7 +140,7 @@ function App() {
                     />
                   </Box>
                 ) : (
-                  <VirtualTable
+                  <ExcelTable
                     columns={fileState.columns || []}
                     data={filteredRows}
                     height={virtualTableHeight()}

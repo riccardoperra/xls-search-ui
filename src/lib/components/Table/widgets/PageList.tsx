@@ -1,4 +1,3 @@
-import usePagination, { PaginationItemType } from "./use-pagination";
 import React, { FC } from "react";
 import { Button, ButtonGroup } from "@chakra-ui/react";
 import {
@@ -8,6 +7,7 @@ import {
   AiOutlineLeft,
   AiOutlineRight,
 } from "react-icons/all";
+import usePagination, { PaginationItemType } from "../hooks/use-pagination";
 
 interface PageListProps {
   pageSize: number;
@@ -27,9 +27,6 @@ export const PageList: FC<PageListProps> = (props) => {
   });
 
   const PageItemLabel = (itemType: PaginationItemType) => {
-    if (typeof itemType === "number") {
-      return itemType;
-    }
     if (itemType === "start-ellipsis" || itemType === "end-ellipsis") {
       return <AiOutlineEllipsis />;
     }

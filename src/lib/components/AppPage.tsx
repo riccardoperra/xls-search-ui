@@ -1,10 +1,11 @@
 import { Box } from "@chakra-ui/react";
 import React, { FC } from "react";
-import { useObservable } from "../../state/state-utils";
-import { isMobile$ } from "../../state/ui";
+import { useObservable } from "../utils";
+import { isMobile$ } from "../../store";
 
 export const AppPage: FC = ({ children }) => {
   const [isMobile] = useObservable(isMobile$);
+  // TODO: fix windowSize re-rendering component
   // const [size] = useObservable(windowSize$);
 
   return (
