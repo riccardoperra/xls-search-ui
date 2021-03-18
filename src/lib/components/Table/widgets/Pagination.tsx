@@ -1,9 +1,9 @@
 import { FC } from "react";
 import { UsePaginationInstanceProps, UsePaginationState } from "react-table";
-import { PageList } from "./Pagination/PageList";
 import React, { Box, Flex, Select, Stack } from "@chakra-ui/react";
-import { useObservable } from "../../state/state-utils";
-import { isMobile$ } from "../../state/ui";
+import { PageList } from "./PageList";
+import { useObservable } from "../../../utils";
+import { isMobile$ } from "../../../../store";
 
 type PaginationProps<D extends object = {}> = Omit<
   UsePaginationInstanceProps<D>,

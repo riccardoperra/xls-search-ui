@@ -7,11 +7,11 @@ type ObservableType<T extends Observable<any>> = T extends Observable<infer A>
   : never;
 
 export const setObservableState = <T extends BehaviorSubject<any>>(
-  stateBSubject: T,
+  stateBehaviorSubject: T,
   newState: (state: ObservableType<T>) => Partial<ObservableType<T>>
 ) => {
-  const _previousValue = stateBSubject.getValue();
-  stateBSubject.next({
+  const _previousValue = stateBehaviorSubject.getValue();
+  stateBehaviorSubject.next({
     ..._previousValue,
     ...newState(_previousValue),
   });

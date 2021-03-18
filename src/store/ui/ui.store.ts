@@ -2,18 +2,13 @@ import { BehaviorSubject, fromEvent } from "rxjs";
 import {
   debounceTime,
   distinctUntilChanged,
-  map,
   shareReplay,
 } from "rxjs/operators";
 
-type UIState = {
+export type UIState = {
   innerHeight: number;
   innerWidth: number;
 };
-
-const mobileMq = 640;
-
-const getIsMobile = (state: UIState) => state.innerWidth < mobileMq;
 
 const initialState: UIState = {
   innerWidth: window.innerWidth,
@@ -26,14 +21,4 @@ export const windowResize$ = fromEvent(window, "resize").pipe(
   debounceTime(100),
   distinctUntilChanged(),
   shareReplay({ refCount: true, bufferSize: 1 })
-);
-
-export const windowSize$ = UIState$.pipe(
-  map(({ innerWidth, innerHeight }) => ({ innerWidth, innerHeight })),
-  distinctUntilChanged()
-);
-
-export const isMobile$ = UIState$.pipe(
-  map(getIsMobile),
-  distinctUntilChanged()
 );
